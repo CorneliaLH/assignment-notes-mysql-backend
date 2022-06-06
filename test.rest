@@ -1,0 +1,67 @@
+GET http://localhost:3005/users
+
+###
+
+POST http://localhost:3005/users/login
+Content-Type: application/json
+
+{
+    "userName":"Markusasdf",
+    "password":"YESasdf"
+}
+
+###
+
+GET http://localhost:3005/posts
+
+###
+
+POST http://localhost:3005/posts/post
+Content-Type: application/json
+
+{   "userId": 9, 
+    "title":"<h2>Äta</h2>",
+    "message":"<p>Moppa, dammsuga, putsa fönster</p>",
+    "created":"2022-06-03"
+}
+
+###
+
+POST http://localhost:3005/posts/updatef
+Content-Type: application/json
+
+{
+    "id":14,
+    "title":"asdfasdfsad ",
+    "message":"asdfasdfsadf"
+}
+
+###
+
+POST http://localhost:3005/posts/post/:id
+Content-Type: application/json
+
+{
+    "userId":10
+}
+
+###
+
+POST http://localhost:3005/posts/poster/:titleandid
+Content-Type: application/json
+
+{
+    "userId":10,
+    "id":8
+}
+
+###
+
+POST http://localhost:3005/posts/change/:titleandid
+Content-Type: application/json
+
+{
+    "userId":9,
+    "id":18,
+    "message":"<h2><span style='background-color: rgb(191, 237, 210);'>sdfasdfasdfasdf</span></h2><p>asdfasdfsadfas</p>"
+}
