@@ -10,7 +10,6 @@ router.post("/all", function (req, res, next) {
     if (err) {
       console.log(err);
     }
-    console.log("result ", result);
     res.send(result);
   });
 });
@@ -74,19 +73,17 @@ router.post("/change/", function (req, res, next) {
       console.log(err);
     }
 
-    let sql2 = `SELECT title,message FROM posts WHERE id="${req.body.id}" `;
-    req.app.locals.con.query(sql2, function (err, result) {
-      console.log(result[0].title + req.body.title);
+    let sql1 = `SELECT title,message FROM posts WHERE id="${req.body.id}" `;
+    req.app.locals.con.query(sql1, function (err, result) {
       if (
         result[0].title === req.body.title &&
         result[0].message === req.body.message
       ) {
         res.json({ error: "Du har inte gjort några ändringar, försök igen!" });
       } else {
-        let sql = `UPDATE posts SET message = '${req.body.message}',title = '${req.body.title}' WHERE id="${req.body.id}" AND userId="${req.body.userId}"`;
-        req.app.locals.con.query(sql, function (err, result) {
+        let sql2 = `UPDATE posts SET message = '${req.body.message}',title = '${req.body.title}' WHERE id="${req.body.id}" AND userId="${req.body.userId}"`;
+        req.app.locals.con.query(sql2, function (err, result) {
           if (err) {
-            console.log("HÄR ÄR ETT ERROR", err);
             res.json({ error: "Något gick fel, försök igen" });
           } else {
             res.json({ result: "ok" });

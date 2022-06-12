@@ -12,6 +12,16 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:3005/users/newuser
+Content-Type: application/json
+
+{
+    "userName":"HOLA",
+    "password":"Lösenord"
+}
+
+###
+
 GET http://localhost:3005/posts
 
 ###
@@ -53,7 +63,7 @@ Content-Type: application/json
     "title":"Hej",
     "id":32,
     "userId":8,
-    "message":"<h2><span style='background-color: rgb(191, 237, 210);'>sdfasdfasdfasdf</span></h2><p>asdfasdfsadfas</p>"
+    "message":"<h2><span style=>sdfasdfasdfasdf</span></h2><p>asdfasdfsadfas</p>"
 }
 
 ###
