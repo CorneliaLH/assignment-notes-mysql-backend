@@ -1,10 +1,10 @@
 var express = require("express");
-// const req = require("express/lib/request");
 var router = express.Router();
 const mysql = require("mysql2");
+const { resetWatchers } = require("nodemon/lib/monitor/watch");
 
 //POST id för att skriva ut den användarens meddelanden
-router.post("/post/:id", function (req, res, next) {
+router.post("/all", function (req, res, next) {
   let sql2 = `SELECT * FROM posts WHERE userId=${req.body.userId}`;
   req.app.locals.con.query(sql2, function (err, result) {
     if (err) {
@@ -15,7 +15,9 @@ router.post("/post/:id", function (req, res, next) {
   });
 });
 
-router.post("/poster/:titleandid", function (req, res, next) {
+//Rendera ut beroende på id
+
+router.post("/findpost", function (req, res, next) {
   console.log(req.body.id);
   console.log(req.body.userId);
   let sql2 = `SELECT * FROM posts WHERE id=${req.body.id}`;
@@ -30,71 +32,67 @@ router.post("/poster/:titleandid", function (req, res, next) {
 
 //NYTT MEDDELANDE
 
-router.post("/post", function (req, res, next) {
+router.post("/new", function (req, res, next) {
   req.app.locals.con.connect(function (err) {
     if (err) {
       console.log(err);
     }
     console.log(req.body);
-    let sql = `INSERT INTO posts (title, message, userId, created) VALUES ("${req.body.title}", "${req.body.message}","${req.body.userId}","${req.body.created}")`;
+    let sql = `INSERT INTO posts (title, message, userId) VALUES ("${req.body.title}", '${req.body.message}','${req.body.userId}')`;
     req.app.locals.con.query(sql, function (err, result) {
       if (err) {
         console.log(err);
       }
-      console.log("result ", result);
+      res.json({ result: "ok" });
     });
   });
 });
 
-//ÄNDRA TITEL ELLER MEDDELANDE
-
-router.post("/updatef", function (req, res, next) {
-  if (req.body.message !== null || undefined) {
-    req.app.locals.con.connect(function (err) {
+router.post("/remove", function (req, res, next) {
+  console.log(req.body.id);
+  req.app.locals.con.connect(function (err) {
+    if (err) {
+      console.log(err);
+    }
+    console.log(req.body);
+    let sql = `DELETE FROM posts WHERE id = "${req.body.id}"`;
+    req.app.locals.con.query(sql, function (err, result) {
       if (err) {
         console.log(err);
       }
-
-      let sql = `UPDATE posts SET message = "${req.body.message}" WHERE id="${req.body.id}"`;
-      req.app.locals.con.query(sql, function (err, result) {
-        if (err) {
-          console.log(err);
-        }
-        console.log("result ", result);
-      });
+      res.json({ result: "ok" });
     });
-  }
-  if (req.body.title !== null || undefined) {
-    req.app.locals.con.connect(function (err) {
-      if (err) {
-        console.log(err);
-      }
-      let newMessage = req.body.message.replace(/"/g, "'");
-
-      let sql = `UPDATE posts SET title = "${newMessage}" WHERE id="${req.body.id}"`;
-      req.app.locals.con.query(sql, function (err, result) {
-        if (err) {
-          console.log(err);
-        }
-        console.log("result ", result);
-      });
-    });
-  }
+  });
 });
 
-router.post("/change/:itleandid", function (req, res, next) {
+//ÄNDRA titel eller meddelande
+
+router.post("/change/", function (req, res, next) {
   console.log(req.body.message);
   req.app.locals.con.connect(function (err) {
     if (err) {
       console.log(err);
     }
 
-    let sql = `UPDATE posts SET message = "${req.body.message}" WHERE id="${req.body.id}" AND userId="${req.body.userId}"`;
-    req.app.locals.con.query(sql, function (err, result) {
-      if (err) {
-        console.log(err);
+    let sql2 = `SELECT title,message FROM posts WHERE id="${req.body.id}" `;
+    req.app.locals.con.query(sql2, function (err, result) {
+      console.log(result[0].title + req.body.title);
+      if (
+        result[0].title === req.body.title &&
+        result[0].message === req.body.message
+      ) {
+        res.json({ error: "Du har inte gjort några ändringar, försök igen!" });
+      } else {
+        let sql = `UPDATE posts SET message = '${req.body.message}',title = '${req.body.title}' WHERE id="${req.body.id}" AND userId="${req.body.userId}"`;
+        req.app.locals.con.query(sql, function (err, result) {
+          if (err) {
+            console.log("HÄR ÄR ETT ERROR", err);
+            res.json({ error: "Något gick fel, försök igen" });
+          } else {
+            res.json({ result: "ok" });
+          }
+        });
       }
-      console.log("result ", result);
     });
   });
 });

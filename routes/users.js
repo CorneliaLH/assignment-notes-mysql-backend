@@ -1,5 +1,4 @@
 var express = require("express");
-// const req = require("express/lib/request");
 var router = express.Router();
 const mysql = require("mysql2");
 
@@ -7,6 +6,8 @@ const mysql = require("mysql2");
 router.get("/", function (req, res, next) {
   res.send("respond with a resource");
 });
+
+//POST för att logga in
 
 router.post("/login", function (req, res, next) {
   req.app.locals.con.connect(function (err) {
@@ -18,7 +19,6 @@ router.post("/login", function (req, res, next) {
       if (err) {
         console.log(err);
       }
-      console.log(result);
       if (result.length === 0) {
         res.json({ message: "error" });
       } else {
@@ -28,4 +28,6 @@ router.post("/login", function (req, res, next) {
     });
   });
 });
+
+
 module.exports = router;

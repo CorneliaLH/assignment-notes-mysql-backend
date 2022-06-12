@@ -6,8 +6,8 @@ POST http://localhost:3005/users/login
 Content-Type: application/json
 
 {
-    "userName":"Markusasdf",
-    "password":"YESasdf"
+    "userName":"Cornelia",
+    "password":"Lösenord"
 }
 
 ###
@@ -16,38 +16,27 @@ GET http://localhost:3005/posts
 
 ###
 
-POST http://localhost:3005/posts/post
+POST http://localhost:3005/posts/new
 Content-Type: application/json
 
-{   "userId": 9, 
-    "title":"<h2>Äta</h2>",
-    "message":"<p>Moppa, dammsuga, putsa fönster</p>",
-    "created":"2022-06-03"
+{   
+    "userId": 9, 
+    "title":"HOLAHOLA",
+    "message":"<p>Moppa, dammsuga, putsa fönster</p>"
 }
 
 ###
 
-POST http://localhost:3005/posts/updatef
-Content-Type: application/json
-
-{
-    "id":14,
-    "title":"asdfasdfsad ",
-    "message":"asdfasdfsadf"
-}
-
-###
-
-POST http://localhost:3005/posts/post/:id
+POST http://localhost:3005/posts/all
 Content-Type: application/json
 
 {
-    "userId":10
+    "userId":8
 }
 
 ###
 
-POST http://localhost:3005/posts/poster/:titleandid
+POST http://localhost:3005/posts/findpost
 Content-Type: application/json
 
 {
@@ -57,11 +46,21 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3005/posts/change/:titleandid
+POST http://localhost:3005/posts/change/
 Content-Type: application/json
 
 {
-    "userId":9,
-    "id":18,
+    "title":"Hej",
+    "id":32,
+    "userId":8,
     "message":"<h2><span style='background-color: rgb(191, 237, 210);'>sdfasdfasdfasdf</span></h2><p>asdfasdfsadfas</p>"
+}
+
+###
+
+POST http://localhost:3005/posts/remove
+Content-Type: application/json
+
+{
+    "id":31
 }
